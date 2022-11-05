@@ -15,8 +15,17 @@ app.post("/sign-up", (req, res) => {
 })
 
 app.post("/tweets", (req, res) => {
-    const tweet = req.body
-    tweets.push(tweet)
+    const {username, tweet} = req.body
+    const userFormat = users.find((user) => user.username === username)
+    const {avatar} = userFormat
+    const tweetFormat =
+    {
+		username: username,
+		avatar: avatar,
+		tweet: tweet
+	}
+    tweets.push(tweetFormat)
+    //res.send("OK")
     res.send(tweets)
 })
 /* if (tweets.length === 10){
