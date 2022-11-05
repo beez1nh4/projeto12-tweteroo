@@ -17,10 +17,17 @@ app.post("/sign-up", (req, res) => {
 app.post("/tweets", (req, res) => {
     const tweet = req.body
     tweets.push(tweet)
-    res.send("OK")
+    res.send(tweets)
 })
-
-
+/* if (tweets.length === 10){
+    const olderTweet = tweets.shift()
+    tweets = deleteFirstItem(olderTweet, tweets)
+}
+function deleteFirstItem(firstItem, array){
+    const newArray = array.filter((item) => item !== firstItem)
+    return newArray
+}
+ */
 app.get("/tweets", (req, res) => {
     
 })
