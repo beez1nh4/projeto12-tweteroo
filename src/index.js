@@ -35,10 +35,9 @@ app.post("/tweets", (req, res) => {
 function deleteFirstItem(firstItem, array){
     const newArray = array.filter((item) => item !== firstItem)
     return newArray
-}
- */
+} */
 app.get("/tweets", (req, res) => {
-    
+    res.send(tweets)
 })
 
 
