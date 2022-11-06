@@ -1,4 +1,5 @@
  //npx nodemon src/index
+ //fuser -k 5000/tcp
 
 import express from "express"
 import cors from "cors"
@@ -41,17 +42,27 @@ app.post("/tweets", (req, res) => {
 })
 
 app.get("/tweets", (req, res) => {
+    let recentTweets = []
     if (tweets.length > 10){
         let numberOfTweetsToIgnore = tweets.length - 10
     for (let i = 1; i < numberOfTweetsToIgnore+1; i++){
         let olderTweet = tweets.shift()
-        tweets = tweets.filter((item) => item !== olderTweet)
+        recentTweets = tweets.filter((item) => item !== olderTweet)
     }
+    res.send(recentTweets)
+    return
     }
     
     res.send(tweets)
 })
 
+app.get('/tweets/:USERNAME', (req, res) => {
+    const usernameParam = req.params.USERNAME;
+    const selectedTweets = tweets.filter(tweet => tweet.username === usernameParam);
+    res.send(selectedTweets);
+  });
 
 
-app.listen(5000);
+app.listen(5000,() => {
+    console.log('Running on http://localhost:5000')
+  });
