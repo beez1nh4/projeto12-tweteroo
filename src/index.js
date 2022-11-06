@@ -12,12 +12,21 @@ let tweets = []
 
 app.post("/sign-up", (req, res) => {
     const user = req.body
+    const {username, avatar} = req.body
+    if (!username || !avatar){
+        res.status(400).send("Todos os campos são obrigatórios!")
+        return
+    }
     users.push(user)
-    res.send("OK")
+    res.status(201).send("OK")
 })
 
 app.post("/tweets", (req, res) => {
     const {username, tweet} = req.body
+    if (!username || !tweet){
+        res.status(400).send("Todos os campos são obrigatórios!")
+        return
+    }
     const userFormat = users.find((user) => user.username === username)
     const {avatar} = userFormat
     const tweetFormat =
@@ -27,7 +36,7 @@ app.post("/tweets", (req, res) => {
 		tweet: tweet
 	}
     tweets.push(tweetFormat)
-    res.send("OK")
+    res.status(201).send("OK")
     //res.send(tweets)
 })
 
