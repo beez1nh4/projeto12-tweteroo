@@ -23,7 +23,9 @@ app.post("/sign-up", (req, res) => {
 })
 
 app.post("/tweets", (req, res) => {
-    const {username, tweet} = req.body
+    const {tweet} = req.body
+    //const {username, tweet} = req.body
+    const username = req.headers.username
     if (!username || !tweet){
         res.status(400).send("Todos os campos são obrigatórios!")
         return
@@ -42,6 +44,11 @@ app.post("/tweets", (req, res) => {
 })
 
 app.get("/tweets", (req, res) => {
+    const page = req.query.page;
+    const totalNumberPages = Number(Math.ceil((tweets.length)/10))
+    const numberPagesFormat = `${totalNumberPages}`
+
+    if(!page || page == 1){
     let recentTweets = []
     if (tweets.length > 10){
         let numberOfTweetsToIgnore = tweets.length - 10
@@ -49,11 +56,32 @@ app.get("/tweets", (req, res) => {
         let olderTweet = tweets.shift()
         recentTweets = tweets.filter((item) => item !== olderTweet)
     }
-    res.send(recentTweets)
+    res.send(recentTweets.reverse())
     return
     }
+    res.send(tweets.reverse())
+    return
+    } else {
+        if (page <= 0 || Number(page) > totalNumberPages){
+            res.status(400).send("Informe uma página válida!")
+            return
+        
+        } else{
+            let selectedTweets = []
+            let exibityNumber = tweets.length - (totalNumberPages-1)*10
+            if (Number(page) !== totalNumberPages){
+                exibityNumber = 10
+            }
+            for(let i = (totalNumberPages-(Number(page)))*10; i < ((totalNumberPages-(Number(page)))*10)+exibityNumber; i++){
+                if (tweets[i]){
+                selectedTweets.push(tweets[i])
+                }
+            }
+            res.send(selectedTweets.reverse())
+            return
+        }
+    }
     
-    res.send(tweets)
 })
 
 app.get('/tweets/:USERNAME', (req, res) => {
