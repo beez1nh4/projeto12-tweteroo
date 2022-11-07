@@ -25,7 +25,7 @@ app.post("/sign-up", (req, res) => {
 app.post("/tweets", (req, res) => {
     const {tweet} = req.body
     //const {username, tweet} = req.body
-    const username = req.headers.username
+    const username = req.headers.user
     if (!username || !tweet){
         res.status(400).send("Todos os campos são obrigatórios!")
         return
@@ -44,9 +44,8 @@ app.post("/tweets", (req, res) => {
 })
 
 app.get("/tweets", (req, res) => {
-    const page = req.query.page;
+    const page = Number(req.query.page);
     const totalNumberPages = Number(Math.ceil((tweets.length)/10))
-    const numberPagesFormat = `${totalNumberPages}`
 
     if(!page || page == 1){
     let recentTweets = []
